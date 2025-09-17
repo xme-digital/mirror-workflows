@@ -43,7 +43,7 @@ jobs:
             "xm-online"
             "xm-online-idea-plugin"
             "xm-uaa"
-            "xm-ms-webapp"
+            "xm-webapp"
           )
           for REPO in "${REPOS[@]}"; do
             echo "--- Mirroring ${REPO} ---"
