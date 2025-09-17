@@ -64,8 +64,9 @@ jobs:
             git config --add remote.push-mirror.push '+refs/tags/*:refs/tags/*'
             echo "Configured push-mirror for tags"
             
-            git config --add remote.push-mirror.push '+refs/pull/*/head:refs/pull/*/head'
-            echo "Configured push-mirror for pull requests"
+            # [remote rejected] refs/pull/6/head -> refs/pull/6/head (deny updating a hidden ref)
+            # git config --add remote.push-mirror.push '+refs/pull/*/head:refs/pull/*/head'
+            # echo "Configured push-mirror for pull requests"
 
             git push --mirror push-mirror
             echo "Pushed all refs to push-mirror"
