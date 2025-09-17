@@ -40,10 +40,10 @@ jobs:
             "xm-ms-scheduler"
             "xm-ms-template"
             "xm-ms-timeline"
-            "xm-ms-webapp"
             "xm-online"
             "xm-online-idea-plugin"
             "xm-uaa"
+            "xm-ms-webapp"
           )
           for REPO in "${REPOS[@]}"; do
             echo "--- Mirroring ${REPO} ---"
