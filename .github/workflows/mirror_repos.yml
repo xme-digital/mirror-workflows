@@ -23,7 +23,7 @@ jobs:
             
             cd "${REPO}.git"
             
-            git git push --mirror "https://x:$GITHUB_TOKEN@github.com/xme-digital/${REPO}.git"
+            git push --mirror "https://x:$GITHUB_TOKEN@github.com/xme-digital/${REPO}.git"
 
             cd ..
             rm -rf "${REPO}.git"
