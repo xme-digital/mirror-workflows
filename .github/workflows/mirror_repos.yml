@@ -9,14 +9,8 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure SSH key and Mirror Repositories
+      - name: Mirror Repositories via HTTPS
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.GH_MIRROR_TOKEN }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
           REPOS=(
             "xm-webapp"
             "xm-ms-entity"
@@ -24,13 +18,16 @@ jobs:
           )
           for REPO in "${REPOS[@]}"; do
             echo "Mirroring ${REPO}..."
-            git clone --mirror "git@github.com:xm-online/${REPO}.git"
+            
+            git clone --mirror "https://x:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xm-online/${REPO}.git"
+            
             cd "${REPO}.git"
-            git remote set-url --push origin "git@github.com:xme-digital/${REPO}.git"
+            
+            git remote set-url --push origin "https://x:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xme-digital/${REPO}.git"
+            
             git push --mirror
+            
             cd ..
             rm -rf "${REPO}.git"
             echo "Done with ${REPO}."
           done
-        env:
-          GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
