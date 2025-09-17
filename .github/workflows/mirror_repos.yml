@@ -1,21 +1,36 @@
-name: Mirror Repository
+name: Bulk Repository Mirroring
 
 on:
   schedule:
     - cron: '*/30 * * * *'
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Mirror the repository xm-webapp.git from xm-online to xme-digital
-        uses: repo-sync/github-sync@v2
-        with:
-          source_repo: "git@github.com:xm-online/xm-webapp.git"
-          destination_repo: "git@github.com:xme-digital/xm-webapp.git"
-          sync_tags: "true"
-          git_ssh_private_key: ${{ secrets.GH_MIRROR_TOKEN }}
+      - name: Mirror Repositories
+        run: |
+          REPOS=(
+            "xm-webapp"
+            "xm-ms-entity"
+            "tmf-ms-communication"
+          )
+          for REPO in "${REPOS[@]}"; do
+            echo "Mirroring ${REPO}..."
+            git clone --mirror "git@github.com:xm-online/${REPO}.git"
+            cd "${REPO}.git"
+            git remote set-url --push origin "git@github.com:xme-digital/${REPO}.git"
+            git push --mirror
+            cd ..
+            rm -rf "${REPO}.git"
+            echo "Done with ${REPO}."
+          done
+        env:
+          GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
+
+      - name: Configure SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GH_MIRROR_TOKEN }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
