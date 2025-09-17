@@ -23,7 +23,7 @@ jobs:
             
             cd "${REPO}.git"
             
-            git remote add --mirror=fetch push-mirror "https://x-access-token:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xme-digital/${REPO}.git"
+            git remote add --mirror=fetch push-mirror "https://x:$GITHUB_TOKEN@github.com/xme-digital/${REPO}.git"
             
             git config remote.push-mirror.push '+refs/heads/*:refs/heads/*'
             git config --add remote.push-mirror.push '+refs/tags/*:refs/tags/*'
@@ -34,3 +34,5 @@ jobs:
             rm -rf "${REPO}.git"
             echo "--- Done with ${REPO} ---"
           done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIRROR_TOKEN }}
