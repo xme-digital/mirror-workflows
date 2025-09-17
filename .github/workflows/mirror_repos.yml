@@ -9,7 +9,7 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Mirror Public Repositories
+      - name: Mirror Repositories
         run: |
           REPOS=(
             "xm-webapp"
@@ -25,10 +25,10 @@ jobs:
             
             git remote add --mirror=fetch push-mirror "https://x-access-token:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xme-digital/${REPO}.git"
             
-            git config --add remote.push-mirror.push 'refs/remotes/*:refs/heads/*'
+            git config remote.push-mirror.push '+refs/heads/*:refs/heads/*'
             git config --add remote.push-mirror.push '+refs/tags/*:refs/tags/*'
             
-            git push --mirror push-mirror
+            git push --mirror
             
             cd ..
             rm -rf "${REPO}.git"
