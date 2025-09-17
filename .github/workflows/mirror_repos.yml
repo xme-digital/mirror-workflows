@@ -20,16 +20,19 @@ jobs:
             echo "--- Mirroring ${REPO} ---"
             
             git clone --mirror "https://github.com/xm-online/${REPO}.git"
-            
+            echo "Cloned ${REPO}"
+
             cd "${REPO}.git"
-            
+            echo "Changed directory to ${REPO}.git"
+            echo "Setting up push mirror to xme-digital/${REPO}"
             git remote add --mirror=fetch push-mirror "https://x-access-token:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xme-digital/${REPO}.git"
-            
+            echo "Configured push-mirror remote"
             git config remote.push-mirror.push '+refs/heads/*:refs/heads/*'
+            echo "Configured push-mirror for branches"
             git config --add remote.push-mirror.push '+refs/tags/*:refs/tags/*'
-            
+            echo "Configured push-mirror for tags"
             git push --mirror
-            
+            echo "Pushed all refs to push-mirror"
             cd ..
             rm -rf "${REPO}.git"
             echo "--- Done with ${REPO} ---"
