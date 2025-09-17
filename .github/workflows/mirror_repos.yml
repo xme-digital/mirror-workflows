@@ -19,7 +19,7 @@ jobs:
           for REPO in "${REPOS[@]}"; do
             echo "Mirroring ${REPO}..."
             
-            git clone --mirror "https://x:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xm-online/${REPO}.git"
+            git clone --mirror "https://github.com/xm-online/${REPO}.git"
             
             cd "${REPO}.git"
             
