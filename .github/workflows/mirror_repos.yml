@@ -9,8 +9,14 @@ jobs:
   mirror:
     runs-on: ubuntu-latest
     steps:
-      - name: Mirror Repositories
+      - name: Configure SSH key and Mirror Repositories
         run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GH_MIRROR_TOKEN }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
           REPOS=(
             "xm-webapp"
             "xm-ms-entity"
@@ -28,9 +34,3 @@ jobs:
           done
         env:
           GIT_SSH_COMMAND: 'ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no'
-
-      - name: Configure SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.GH_MIRROR_TOKEN }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
