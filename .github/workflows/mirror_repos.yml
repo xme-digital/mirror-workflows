@@ -23,11 +23,11 @@ jobs:
             
             cd "${REPO}.git"
             
-            git remote set-url --push origin "https://x:${{ secrets.GH_MIRROR_TOKEN }}@github.com/xme-digital/${REPO}.git"
-            
-            git push --mirror
-            
+            git git push --mirror "https://x:$GITHUB_TOKEN@github.com/xme-digital/${REPO}.git"
+
             cd ..
             rm -rf "${REPO}.git"
             echo "Done with ${REPO}."
           done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIRROR_TOKEN }}
